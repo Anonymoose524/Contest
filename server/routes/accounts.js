@@ -5,11 +5,17 @@ const Account = require("../models/account");
 //Get an account or get all accounts
 router.get("/", async (req, res) => {
     try {
-        //If the query is valid and the username exists, return account
-        if(typeof req.query.username === "string" && await Account.exists({username: req.query.username})){
-            const accounts = await Account.find({username: req.query.username});
-            res.json(accounts);
-        //Return all accounts
+        //If the query is valid, search if username exists
+        if(typeof req.query.username === "string"){
+            //If username exists, return username
+            if(await Account.exists({username: req.query.username})){
+                const accounts = await Account.find({username: req.query.username});
+                res.json(accounts);
+            //Username doesn't exist, return 400 error
+            } else {
+                res.status(400).send("Username doesn't exist");
+            }
+        //No username query, return all accounts
         } else {
             const accounts = await Account.find();
             res.json(accounts);
@@ -44,8 +50,18 @@ router.post("/", async (req, res) => {
     }
 });
 
-//Update an account
+//Update an existing account by username
 
-//Delete an account
+
+//Delete an account by ID
+router.delete("/:id", (req, res) => {
+    Account.findByIdAndDelete(req.params.id, (err, docs) => {
+         if(err || docs == null){
+            res.status(400).send("Username doesn't exist");
+         } else {
+            res.json(docs);
+         }
+    })
+});
 
 module.exports = router;
