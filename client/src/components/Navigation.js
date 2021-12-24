@@ -1,9 +1,15 @@
 import React from "react";
-import Login from "./Login";
+//import Login from "./Login";
 //import {  Link } from "react-router-dom";
 //import "./Navigation.css";
 
-function Navigation(){
+function Navigation(props){
+
+    function handleLogout(event){
+        event.preventDefault();
+        props.setToken(null);
+    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
@@ -20,7 +26,7 @@ function Navigation(){
                             <a className="nav-link" href="/admin">FAQ</a>
                         </li>
                         <li className="nav-item">
-                            <a data-target="#myModal" data-toggle="modal" className="nav-link" href="#myModal">Logout</a> {/*TODO*/}
+                            <a className="nav-link" onClick={handleLogout}>Logout</a> {/*TODO*/}
                             
                         </li>
                     </ul>

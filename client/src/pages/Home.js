@@ -1,14 +1,23 @@
 import React from "react";
 import AnnounceCard from "../components/AnnounceCard";
+require('dotenv').config();
 
-class Home extends React.Component{
+class Home extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {Announcements: []};
+        this.state = JSON.parse(window.localStorage.getItem('announcements')) || {
+            Announcements: []
+        };
     }
 
-    componentDidMount() {
+    setState(state) {
+        window.localStorage.setItem('announcements', JSON.stringify(state));
+        super.setState(state);
+    }
+
+    async componentDidMount() {
+        this.getAnnouncements()
         this.refresh = setInterval(
             () => this.getAnnouncements(),
             1000
@@ -16,24 +25,22 @@ class Home extends React.Component{
     }
 
     async getAnnouncements() {
-        fetch("http://localhost:5000/announcements")
+        console.log(process.env.REACT_APP_SERVER + "/announcements");
+        await fetch(process.env.REACT_APP_SERVER + "/announcements")
             .then(res => res.json())
-            .then(res => {
-                this.setState({Announcements: res});
-                console.log(this.state);
-        });
+            .then(data => this.setState({Announcements: data}))
+            .catch(err => console.log(err));
     }
 
     render() {
-        //const announcements = this.state.Announcements.;
         return (
             <div className="container">
                 <br></br>
                 <h1 className="page-header">Announcements</h1>
-                <hr></hr>
+                <hr />
                 {
-                    this.state.Announcements.map(announcement => (
-                        <AnnounceCard 
+                    this.state.Announcements.map((announcement) => (
+                        <AnnounceCard
                             title={announcement.title} 
                             description={announcement.description}
                         />
