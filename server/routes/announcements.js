@@ -19,13 +19,23 @@ router.get("/", async (req, res) => {
             }
         //No username query, return all announcements
         } else {
-            announcementEvent.once("newAnnouncement", async () => {
-                const announcements = await Announcement.find();
-                res.json(announcements);
-            });
+            const announcements = await Announcement.find();
+            res.json(announcements);
         }
     } catch(err){
         res.json({message: err});
+    }
+});
+
+//Long poll for announcements
+router.get("/long", async(req, res) => {
+    try{
+        announcementEvent.once("newAnnouncement", async () => {
+            const announcements = await Announcement.find();
+            res.json(announcements);
+        });
+    } catch(err){
+        console.log(err);
     }
 });
 

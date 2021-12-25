@@ -17,12 +17,18 @@ class Home extends React.Component {
     }
 
     async componentDidMount() {
+        //Setup announcements
+        await fetch(process.env.REACT_APP_SERVER + "/announcements/")
+            .then((res) => res.json())
+            .then((data) => this.setState({Announcements: data}))
+            .catch((err) => console.log(err));
+        //Begin long polling
         this.getAnnouncements();
     }
 
     async getAnnouncements() {
-        console.log(process.env.REACT_APP_SERVER + "/announcements");
-        await fetch(process.env.REACT_APP_SERVER + "/announcements")
+        console.log(process.env.REACT_APP_SERVER + "/announcements/long");
+        await fetch(process.env.REACT_APP_SERVER + "/announcements/long")
             .then((res) => res.json())
             .then((data) => {
                 this.setState({Announcements: data});

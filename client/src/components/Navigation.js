@@ -8,6 +8,7 @@ function Navigation(props){
     function handleLogout(event){
         event.preventDefault();
         props.setToken(null);
+        window.localStorage.clear();
     }
 
     return (
