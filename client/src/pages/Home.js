@@ -17,19 +17,22 @@ class Home extends React.Component {
     }
 
     async componentDidMount() {
-        this.getAnnouncements()
-        this.refresh = setInterval(
-            () => this.getAnnouncements(),
-            1000
-        );
+        this.getAnnouncements();
     }
 
     async getAnnouncements() {
         console.log(process.env.REACT_APP_SERVER + "/announcements");
         await fetch(process.env.REACT_APP_SERVER + "/announcements")
-            .then(res => res.json())
-            .then(data => this.setState({Announcements: data}))
-            .catch(err => console.log(err));
+            .then((res) => res.json())
+            .then((data) => {
+                this.setState({Announcements: data});
+                console.log("Polled!");
+                this.getAnnouncements();
+            })
+            .catch((err) => {
+                console.log(err);
+                this.getAnnouncements();
+            });
     }
 
     render() {
