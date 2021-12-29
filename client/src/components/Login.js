@@ -14,10 +14,11 @@ function Login(props) {
         "username": event.target.username.value,
         "password": event.target.password.value
       })
-    }).then((response) => {
-      if(response.status === 201){
+    }).then(async (res) => ({status: res.status, json: await res.json()}))
+    .then(data => {
+      if(data.status === 201){
         props.setToken({
-          token: Math.random().toString(36).substring(2,10)
+          token: data.json.newToken
         });
       } else {
         setWarn(true);

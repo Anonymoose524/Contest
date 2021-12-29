@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Account = require("../models/account");
+const Token = require("../models/token");
 
 //Account login
 router.post("/login", async (req, res) => {
@@ -11,8 +12,14 @@ router.post("/login", async (req, res) => {
             });
         } else {
             if (account.validPassword(req.body.password)) {
+                const newToken = new Token({
+                    username: account.username,
+                    admin: account.admin
+                });
+                newToken.save();
                 return res.status(201).send({
-                    message : "Logged In"
+                    message : "Logged In",
+                    newToken: newToken.token
                 });
             } else {
                 return res.status(400).send({
@@ -25,7 +32,6 @@ router.post("/login", async (req, res) => {
 
 //Account signup 
 router.post("/signup", async (req, res) => {
-    
     if(await (Account.exists({username: req.body.username}))){
         res.status(400).send({
             message: "Username taken"
@@ -42,12 +48,23 @@ router.post("/signup", async (req, res) => {
                     message: err
                 });
             } else {
+                const newToken = new Token({
+                    username: account.username,
+                    admin: account.admin
+                });
+                newToken.save();
                 return res.status(201).send({
-                    message: "Account added successfully"
+                    message: "Account added successfully",
+                    newToken: newToken
                 });
             }
         });
     }
+});
+
+//Check if token exists
+router.post("/token", async (req, res) => {
+    res.send(Token.exists({token: req.body.token}));
 });
 
 //Get an account or get all accounts
