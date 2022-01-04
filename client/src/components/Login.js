@@ -20,6 +20,7 @@ function Login(props) {
         props.setToken({
           token: data.json.newToken
         });
+        props.setLoggedIn(true);
       } else {
         setWarn(true);
       }
@@ -51,7 +52,7 @@ function Login(props) {
             <button type="submit">Submit</button>
           </div>
         </form>
-          <WarningBanner/>
+        <WarningBanner/>
       </div>
     )
 }

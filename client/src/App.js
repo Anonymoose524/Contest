@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Login from "./components/Login";
 import Navigation from "./components/Navigation";
+import RequireLogin from './components/RequireLogin';
 import Home from "./pages/Home";
 import Contests from "./pages/Contests";
 import Admin from "./pages/Admin";
@@ -10,6 +10,7 @@ import Admin from "./pages/Admin";
 function App() {
 
   const [token, setToken] = useLocalStorage("token", null);
+  const [loggedIn, setLoggedIn] = useState(null);
 
   //https://usehooks.com/useLocalStorage/
   function useLocalStorage(key, initialValue){
@@ -39,27 +40,34 @@ function App() {
     return [storedValue, setValue];
   }
 
-  function NavBar(props) {
-    return (
-      <div>
-        <Navigation setToken={props.setToken}/>
-        <Outlet />
-      </div>
-    );
-  }
+  // //Be careful with truthy promise
+  // function tokenExists(){
+  //   if(!token) return false;
+  //   return fetch(process.env.REACT_APP_SERVER + "/accounts/token", {
+  //     method: "POST",
+  //     body: token
+  //     })
+  //     .then(res => res.json())
+  //     .then(data => {isPending = false; return data.body});
+  // }
 
-  if(!token) {
-    return <Login setToken={setToken} />;
-  }
+  // if(!token) {
+  //   return <Login setToken={setToken} />;
+  // }
 
   return (
     <Router>
       <Routes>
-          <Route path = "/" element = {<NavBar setToken={setToken} />}>
+        <Route path = "/" element = {
+          <RequireLogin token={token} setToken={setToken} 
+          loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+        }>
+          <Route path = "/" element = {<Navigation setToken={setToken} setLoggedIn={setLoggedIn}/>}>
             <Route exact path = "/" element = {<Home/>} />
             <Route exact path = "/contests" element = {<Contests/>} />
             <Route exact path = "/admin" element = {<Admin/>} />
           </Route>
+        </Route>
       </Routes>
     </Router>
   );

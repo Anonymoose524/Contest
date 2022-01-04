@@ -26,13 +26,12 @@ class Home extends React.Component {
         this.getAnnouncements();
     }
 
+    //Long polling for announcements
     async getAnnouncements() {
-        console.log(process.env.REACT_APP_SERVER + "/announcements/long");
         await fetch(process.env.REACT_APP_SERVER + "/announcements/long")
             .then((res) => res.json())
             .then((data) => {
                 this.setState({Announcements: data});
-                console.log("Polled!");
                 this.getAnnouncements();
             })
             .catch((err) => {
