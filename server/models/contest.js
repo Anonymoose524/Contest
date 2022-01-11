@@ -1,26 +1,26 @@
 const mongoose = require("mongoose");
+const ProblemSchema = require("./problem")
 
 const ContestSchema = mongoose.Schema({
     title: {
         type: String,
         required: true
     },
-    active: {
-        type: Boolean,
+    problems: {
+        type: [ProblemSchema.schema],
+        default: []
+    },
+    start: {
+        type: Date,
         required: true
     },
-    problems: {
-        type: [{
-            title: {
-                type: String,
-                required: true
-            },
-            statement: {
-                type: String,
-                required: true
-            }
-        }],
+    end: {
+        type: Date,
         required: true
+    },
+    description: {
+        type: String,
+        required: false
     },
     date: {
         type: Date,

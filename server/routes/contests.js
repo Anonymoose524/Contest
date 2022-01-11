@@ -1,9 +1,61 @@
 const express = require("express");
-
 const router = express.Router();
+const Contest = require("../models/contest");
+const events = require("events");
+const contestEvent = new events.EventEmitter();
 
-router.get("/", (req, res) => {
-    res.send("This is contests");
+//Gets all the contests
+router.get("/", async (req, res) => {
+    try {
+        const contests = await Contest.find();
+        res.json(contests);
+    } catch(err) {
+        res.status(500).json({message: err});
+    }
+});
+
+//Long poll for contests
+router.get("/long", async(req, res) => {
+    try{
+        contestEvent.once("newContest", async () => {
+            const contest = await Contest.find();
+            res.json(contest);
+        });
+    } catch(err){
+        console.log(err);
+    }
+});
+
+//Adds a contest
+router.post("/", async (req, res) => {
+    if(await (Contest.exists({title: req.body.title}))){
+        res.status(400).send({
+            message: "Contest already exists"
+        });
+    } else {
+        const newContest = new Contest({
+            title: req.body.title,
+            start: req.body.start,
+            end: req.body.end
+        });
+        newContest.save();
+        contestEvent.emit("newContest")
+        res.status(201).send({message: "Contest added"});
+    }
+});
+
+//Adds a problem to an existing contest
+router.post("/problem", async (req, res) => {
+    const contest = await Contest.findOne({title: req.body.title});
+    if(Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    //Binary search and replace?
+    contest.problems.push({
+        title: req.body.problem.title,
+        statement: req.body.problem.statement
+    });
+    contest.problems.sort((a, b) => a.title.localeCompare(b.title));
+    contest.save();
+    res.status(201).send("Problem added");
 });
 
 module.exports = router;
