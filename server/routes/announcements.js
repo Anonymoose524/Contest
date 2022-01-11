@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
             } else {
                 res.status(400).send("Title doesn't exist");
             }
-        //No username query, return all announcements
+        //No query, return all announcements
         } else {
             const announcements = await Announcement.find();
             res.json(announcements);
