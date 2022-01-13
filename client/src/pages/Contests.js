@@ -19,11 +19,8 @@ class Contests extends React.Component {
         //Setup contests
         await fetch(process.env.REACT_APP_SERVER + "/contests/")
             .then((res) => res.json())
-            .then((data) => {
-                data[0].start = new Date(data[0].start);
-                data[0].end = new Date(data[0].end);
-                this.setState({Contests: data});
-            }).catch((err) => console.log(err));
+            .then((data) => this.setState({Contests: data}))
+            .catch((err) => console.log(err));
         //Begin long polling
         this.getContests();
     }
@@ -33,8 +30,6 @@ class Contests extends React.Component {
         await fetch(process.env.REACT_APP_SERVER + "/contests/long")
             .then((res) => res.json())
             .then((data) => {
-                data[0].start = new Date(data[0].start);
-                data[0].end = new Date(data[0].end);
                 this.setState({Contests: data});
                 this.getContests();
             })
@@ -53,6 +48,7 @@ class Contests extends React.Component {
                 {
                     this.state.Contests.map((contest) => (
                         <ContestCard
+                            contestId={contest.contestId}
                             title={contest.title} 
                             start={contest.start}
                             end={contest.end}

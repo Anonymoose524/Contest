@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 const ProblemSchema = require("./problem")
+const crypto = require("crypto");
 
 const ContestSchema = mongoose.Schema({
+    contestId: {
+        type: String,
+        default: crypto.randomBytes(10).toString("hex")
+    },
     title: {
         type: String,
         required: true

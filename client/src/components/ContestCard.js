@@ -12,6 +12,7 @@ function ContestCard(props) {
                 }</h4>
                 <p className="card-text">{props.description || ""}</p>
             </div>
+            <a href={window.location.href + "/" + props.contestId} className="stretched-link"/>
         </div>
     );
 }
