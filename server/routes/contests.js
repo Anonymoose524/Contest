@@ -19,8 +19,8 @@ router.get("/", async (req, res) => {
 router.get("/long", async(req, res) => {
     try{
         contestEvent.once("newContest", async () => {
-            const contest = await Contest.findOne();
-            res.json(contest);
+            const contests = await Contest.find();
+            res.json(contests);
         });
     } catch(err){
         console.log(err);
