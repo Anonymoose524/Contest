@@ -10,11 +10,12 @@ function RequireLogin(props){
             props.setLoggedIn(false);
             return;
         }
-        fetch(process.env.REACT_APP_SERVER + "/accounts/token", {
-            method: "POST",
-            body: props.token
-        }).then(res => res.json())
-        .then(data => props.setLoggedIn(data));
+        async function fetchData() {
+            await fetch(process.env.REACT_APP_SERVER + "/accounts/token/" + props.token.token)
+            .then(res => res.json())
+            .then(data => props.setLoggedIn(data ? true : false));
+        }
+        fetchData();
     }, []);
 
     if(props.loggedIn === null){

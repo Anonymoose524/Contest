@@ -8,6 +8,8 @@ import Contests from "./pages/Contests";
 import Contest from "./pages/Contest";
 import Problem from "./pages/Problem";
 import Admin from "./pages/Admin";
+import NotFound from './components/NotFound';
+import RequireAdmin from './components/RequireAdmin';
 
 function App() {
 
@@ -50,11 +52,14 @@ function App() {
           loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
         }>
           <Route path = "/" element = {<Navigation setToken={setToken} setLoggedIn={setLoggedIn}/>}>
+            <Route path = "*" element = {<NotFound/>}/>
             <Route exact path = "/" element = {<Home/>} />
             <Route exact path = "/contests" element = {<Contests/>}/>
             <Route path = "/contests/:contestId" element = {<Contest/>}/>
             <Route path = "/contests/:contestId/:problemId" element = {<Problem/>} />
-            <Route exact path = "/admin" element = {<Admin/>} />
+            <Route path = "/" element = {<RequireAdmin token={token}/>}>
+              <Route exact path = "/admin" element = {<Admin/>} />
+            </Route>
           </Route>
         </Route>
       </Routes>
