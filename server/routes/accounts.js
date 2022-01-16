@@ -39,12 +39,13 @@ router.post("/signup", async (req, res) => {
     } else {
         const newAccount = new Account({
             username: req.body.username,
-            members: req.body.members
+            members: req.body.members,
+            admin: (req.body.admin ? true : false)
         });
         newAccount.setPassword(req.body.password);
         newAccount.save((err, account) => {
             if(err){
-                return res.status(400).send({
+                return res.status(500).send({
                     message: err
                 });
             } else {
