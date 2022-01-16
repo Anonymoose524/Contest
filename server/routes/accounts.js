@@ -62,9 +62,10 @@ router.post("/signup", async (req, res) => {
     }
 });
 
-//Check if token exists
-router.post("/token", async (req, res) => {
-    res.send(Token.exists({token: req.body.token}));
+//Get a token
+router.get("/token/:tokenId", async (req, res) => {
+    const token = await Token.findOne({token: req.params.tokenId});
+    res.json(token);
 });
 
 //Get an account or get all accounts
