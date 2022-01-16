@@ -4,7 +4,6 @@ const Contest = require("../models/contest");
 const events = require("events");
 const contestEvent = new events.EventEmitter();
 
-
 //Gets all the contests
 router.get("/", async (req, res) => {
     try {
@@ -16,7 +15,7 @@ router.get("/", async (req, res) => {
 });
 
 //Long poll for all contests
-router.get("/long", async(req, res) => {
+router.get("/long", async (req, res) => {
     try{
         contestEvent.once("newContest", async () => {
             const contests = await Contest.find();
@@ -36,7 +35,7 @@ router.get("/:contestId", async (req, res) => {
 });
 
 //Long poll for only one contest
-router.get("/long/:contestId", async(req, res) => {
+router.get("/long/:contestId", async (req, res) => {
     try{
         contestEvent.once(req.params.contestId, async () => {
             const contest = await Contest.findOne({contestId: req.params.contestId});
@@ -60,7 +59,7 @@ router.post("/", async (req, res) => {
             start: req.body.start,
             end: req.body.end
         });
-        newContest.save();
+        await newContest.save();
         contestEvent.emit("newContest")
         res.status(201).send({message: "Contest added"});
     }
@@ -76,7 +75,7 @@ router.post("/problem", async (req, res) => {
         statement: req.body.problem.statement
     });
     contest.problems.sort((a, b) => a.title.localeCompare(b.title));
-    contest.save();
+    await contest.save();
     contestEvent.emit(contest.contestId);
     res.status(201).send("Problem added");
 });
