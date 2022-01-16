@@ -31,7 +31,7 @@ router.get("/long", async(req, res) => {
 //Get only one contest using contestId
 router.get("/:contestId", async (req, res) => {
     const contest = await Contest.findOne({contestId: req.params.contestId});
-    if(Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
     res.status(200).json(contest);
 });
 
@@ -69,7 +69,7 @@ router.post("/", async (req, res) => {
 //Adds a problem to an existing contest
 router.post("/problem", async (req, res) => {
     const contest = await Contest.findOne({title: req.body.title});
-    if(Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
     //Binary search and replace?
     contest.problems.push({
         title: req.body.problem.title,
