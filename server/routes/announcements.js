@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 //Long poll for announcements
 router.get("/long", async (req, res) => {
     try{
-        announcementEvent.once("newAnnouncement", async () => {
+        announcementEvent.once("announcementChange", async () => {
             const announcements = await Announcement.find();
             res.json(announcements);
         });
@@ -49,10 +49,17 @@ router.post("/", async (req, res) => {
     try {
         const savedAnnouncement = await announcement.save();
         res.json(savedAnnouncement);
-        announcementEvent.emit("newAnnouncement");
+        announcementEvent.emit("announcementChange");
     } catch(err) {
         res.json({message: err});
     }
+});
+
+//Deletes an announcement by its id
+router.delete("/:_id", async (req, res) => {
+    await Announcement.findByIdAndDelete(req.params._id);
+    announcementEvent.emit("announcementChange");
+    res.json();
 });
 
 module.exports = router;
