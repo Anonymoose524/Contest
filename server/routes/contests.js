@@ -30,7 +30,7 @@ router.get("/long", async (req, res) => {
 //Get only one contest using contestId
 router.get("/:contestId", async (req, res) => {
     const contest = await Contest.findOne({contestId: req.params.contestId});
-    if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    if(!contest || Object.keys(contest).length === 0) return res.status(404).send("Contest doesn't exist");
     res.status(200).json(contest);
 });
 

@@ -80,7 +80,7 @@ router.get("/", async (req, res) => {
                 res.json(accounts);
             //Username doesn't exist, return 400 error
             } else {
-                res.status(400).send("Username does not exist");
+                res.status(404).send("Username does not exist");
             }
         //No username query, return all accounts
         } else {
@@ -124,7 +124,7 @@ router.post("/", async (req, res) => {
 router.delete("/:id", (req, res) => {
     Account.findByIdAndDelete(req.params.id, (err, docs) => {
          if(err || docs == null){
-            res.status(400).send("Username does not exist");
+            res.status(404).send("Username does not exist");
          } else {
             res.json(docs);
          }

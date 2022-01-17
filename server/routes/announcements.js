@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
 });
 
 //Long poll for announcements
-router.get("/long", async(req, res) => {
+router.get("/long", async (req, res) => {
     try{
         announcementEvent.once("newAnnouncement", async () => {
             const announcements = await Announcement.find();
@@ -36,6 +36,7 @@ router.get("/long", async(req, res) => {
         });
     } catch(err){
         console.log(err);
+        res.status(500).send(err);
     }
 });
 
