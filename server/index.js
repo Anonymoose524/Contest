@@ -26,7 +26,7 @@ const contestsRoute = require("./routes/contests");
 app.use("/contests", contestsRoute);
 
 app.get("/", (req, res) => {
-    res.send("Home page")
+    res.send("Home page");
 });
 
 //Connect to Database
