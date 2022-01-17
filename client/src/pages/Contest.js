@@ -1,4 +1,5 @@
 import React from "react";
+import NotFound from "../components/NotFound";
 import ProblemCard from "../components/ProblemCard";
 
 class Contest extends React.Component {
@@ -6,15 +7,19 @@ class Contest extends React.Component {
     constructor(props){
         super(props);
         this.contestId = window.location.href.substring(window.location.href.lastIndexOf("/") + 1);
-        this.state = {Contest: []};
+        this.state = {Contest: {}};
     }
 
     async componentDidMount() {
         //Setup problems
         await fetch(process.env.REACT_APP_SERVER + "/contests/" + this.contestId)
-            .then((res) => res.json())
-            .then((data) => this.setState({Contest: data}))
-            .catch((err) => console.log(err));
+            .then(async (res) => {
+                if(res.status === 200){
+                    this.setState({Contest: await res.json()});
+                } else {
+                    this.setState({Contest: null});
+                }
+            });
         //Begin long polling
         this.getProblems();
     }
@@ -34,7 +39,8 @@ class Contest extends React.Component {
     }
 
     render(){
-        if(this.state.Contest.length === 0) return null;
+        if(this.state.Contest === null) return <NotFound/>;
+        if(Object.keys(this.state.Contest).length === 0) return null;
         return(
             <div className="container">
                 <br></br>
