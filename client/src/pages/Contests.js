@@ -1,5 +1,5 @@
 import React from "react";
-import ContestCard from "../components/ContestCard";
+import ContestCard from "../components/cards/ContestCard";
 
 class Contests extends React.Component {
 

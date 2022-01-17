@@ -1,6 +1,6 @@
 import React from "react";
 import NotFound from "../components/NotFound";
-import ProblemCard from "../components/ProblemCard";
+import ProblemCard from "../components/cards/ProblemCard";
 
 class Contest extends React.Component {
     

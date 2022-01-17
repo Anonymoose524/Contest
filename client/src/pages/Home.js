@@ -1,5 +1,5 @@
 import React from "react";
-import AnnounceCard from "../components/AnnounceCard";
+import AnnounceCard from "../components/cards/AnnounceCard";
 require('dotenv').config();
 
 class Home extends React.Component {

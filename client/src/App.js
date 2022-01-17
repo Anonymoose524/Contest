@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navigation from "./components/Navigation";
-import RequireLogin from './components/RequireLogin';
+import RequireLogin from './components/auth/RequireLogin';
+import RequireAdmin from './components/auth/RequireAdmin';
 import Home from "./pages/Home";
 import Contests from "./pages/Contests";
 import Contest from "./pages/Contest";
 import Problem from "./pages/Problem";
 import Admin from "./pages/Admin";
 import NotFound from './components/NotFound';
-import RequireAdmin from './components/RequireAdmin';
 
 function App() {
 
