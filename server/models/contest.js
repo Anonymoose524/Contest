@@ -5,7 +5,9 @@ const crypto = require("crypto");
 const ContestSchema = mongoose.Schema({
     contestId: {
         type: String,
-        default: crypto.randomBytes(10).toString("hex")
+        default: function() {
+            return crypto.randomBytes(10).toString("hex");
+        }
     },
     title: {
         type: String,

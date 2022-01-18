@@ -4,7 +4,9 @@ const crypto = require("crypto");
 const TokenSchema = mongoose.Schema({
     token: {
         type: String,
-        default: crypto.randomBytes(16).toString('hex')
+        default: function() {
+            return crypto.randomBytes(16).toString('hex');
+        }
     },
     username: {
         type: String,
