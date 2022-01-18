@@ -78,6 +78,7 @@ router.post("/problem", async (req, res) => {
     });
     contest.problems.sort((a, b) => a.title.localeCompare(b.title));
     await contest.save();
+    contestEvent.emit("contestChange");
     contestEvent.emit(contest.contestId);
     res.status(201).send("Problem added");
 });
