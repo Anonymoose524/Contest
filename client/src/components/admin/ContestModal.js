@@ -5,12 +5,27 @@ function ContestModal(props) {
     
     async function deleteContest(event){
         event.preventDefault();
-        
+        console.log(event.target.getAttribute("index"));
+        let index = parseInt(event.target.getAttribute("index"));
+        await fetch(process.env.REACT_APP_SERVER + "/contests/" + props.Contests[index]._id, {
+            method: "DELETE"
+        });
     }
 
     async function postContest(event){
         event.preventDefault();
-        
+        await fetch(process.env.REACT_APP_SERVER + "/contests", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                contestId: event.target.contestId.value,
+                title: event.target.title.value,
+                start: (new Moment(event.target.start.value, "DD/MM/YYYY hh:mm:ss")).toDate(),
+                end: (new Moment(event.target.end.value, "DD/MM/YYYY hh:mm:ss")).toDate(),
+                description: event.target.description.value
+            })
+        });
+        document.getElementById("postContest").reset();
     }
 
     async function deleteProblem(event){
@@ -37,8 +52,11 @@ function ContestModal(props) {
                             <table className="table table-striped" id="contestTable">
                                 <thead>
                                     <tr>
-                                        <th scope="col"># | Title</th>
-                                        <th scope="col">Date</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Contest ID</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Start Time</th>
+                                        <th scope="col">End Time</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Problems</th>
                                         <th scope="col">Deletion</th>
@@ -51,8 +69,11 @@ function ContestModal(props) {
                                                 <React.Fragment key={index+1}>
                                                     
                                                     <tr>
-                                                        <th scope="row" rowSpan="2">{(index+1) + " | " + contest.title}</th>
-                                                        <td>{new Moment(contest.start).format("DD/MM/YYYY hh:mm:ss") + " - " + new Moment(contest.end).format("DD/MM/YYYY hh:mm:ss")}</td>
+                                                        <th scope="row" rowSpan="2">{index+1}</th>
+                                                        <td>{contest.contestId}</td>
+                                                        <td>{contest.title}</td>
+                                                        <td>{new Moment(contest.start).format("DD/MM/YYYY hh:mm:ss")}</td>
+                                                        <td>{new Moment(contest.end).format("DD/MM/YYYY hh:mm:ss")}</td>
                                                         <td style={{"wordWrap": "break-word","minWidth": "160px", "maxWidth": "160px"}}>{contest.description}</td>
                                                         <td>
                                                             <button type="button" className="btn btn-secondary" data-bs-toggle="collapse" data-bs-target={"#" + contest.contestId}>View Problems</button>
@@ -62,7 +83,7 @@ function ContestModal(props) {
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th colSpan="3">
+                                                        <th colSpan="5">
                                                             <div className="collapse" id={contest.contestId}>
                                                                 <table className="table table-striped">
                                                                     <thead>
@@ -88,8 +109,8 @@ function ContestModal(props) {
                                                                         }
                                                                         <tr>
                                                                             <td><form id={"postProblem:" + contest.contestId} onSubmit={(event) => postProblem(event)}></form></td>
-                                                                            <td><input className="form-control" type={"text"} form={"postProblem:" + contest.contestId} name="title"></input></td>
-                                                                            <td><input className="form-control" type={"text"} form={"postProblem:" + contest.contestId} name="statement"></input></td>
+                                                                            <td><input className="form-control" type={"text"} form={"postProblem:" + contest.contestId} name="title" placeholder="Title"></input></td>
+                                                                            <td><input className="form-control" type={"text"} form={"postProblem:" + contest.contestId} name="statement" placeholder="Statement"></input></td>
                                                                             <td><button type="submit" className="btn btn-success" form={"postProblem:" + contest.contestId}>Create</button></td>
                                                                         </tr>
                                                                     </tbody>
@@ -103,9 +124,12 @@ function ContestModal(props) {
                                         })
                                     }
                                     <tr>
-                                        <td><input className="form-control" type={"text"} form="postContest" name="title"></input></td>
-                                        <td><input className="form-control" type={"text"} form="postContest" name="date"></input></td>
-                                        <td><input className="form-control" type={"text"} form="postContest" name="description"></input></td>
+                                        <td></td>
+                                        <td><input className="form-control" type={"text"} form="postContest" name="contestId" placeholder="Contest ID"></input></td>
+                                        <td><input className="form-control" type={"text"} form="postContest" name="title" placeholder="Title"></input></td>
+                                        <td><input className="form-control" type={"text"} form="postContest" name="start" placeholder="Start Time"></input></td>
+                                        <td><input className="form-control" type={"text"} form="postContest" name="end" placeholder="End Time"></input></td>
+                                        <td><input className="form-control" type={"text"} form="postContest" name="description" placeholder="Description"></input></td>
                                         <td></td>
                                         <td><button type="submit" className="btn btn-success" form="postContest">Create</button></td>
                                     </tr>
