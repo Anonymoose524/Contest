@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 //Long poll for all contests
 router.get("/long", async (req, res) => {
     try{
-        contestEvent.once("newContest", async () => {
+        contestEvent.once("contestChange", async () => {
             const contests = await Contest.find();
             res.json(contests);
         });
@@ -62,7 +62,7 @@ router.post("/", async (req, res) => {
             description: req.body.description
         });
         await newContest.save();
-        contestEvent.emit("newContest")
+        contestEvent.emit("contestChange")
         res.status(201).send({message: "Contest added"});
     }
 });
@@ -80,6 +80,17 @@ router.post("/problem", async (req, res) => {
     await contest.save();
     contestEvent.emit(contest.contestId);
     res.status(201).send("Problem added");
+});
+
+//Deletes a contest by its id
+router.delete("/:_id", async (req, res) => {
+    const deletedContest = await Contest.findByIdAndDelete(req.params._id);
+    if(deletedContest === null) {
+        res.status(404).json(null);
+    } else {
+        contestEvent.emit("contestChange");
+        res.status(200).json(deletedContest);
+    }
 });
 
 module.exports = router;
