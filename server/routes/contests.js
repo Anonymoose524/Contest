@@ -94,4 +94,16 @@ router.delete("/:_id", async (req, res) => {
     }
 });
 
+router.delete("/problem/:contest_id/:problem_id", async (req, res) => {
+    const contest = await Contest.findOne({"_id": req.params.contest_id});
+    if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    let index = contest.problems.findIndex((problem) => problem._id.toString() === req.params.problem_id);
+    if(index == -1) return res.status(404).send("Problem doesn't exist");
+    contest.problems.splice(index, 1);
+    await contest.save();
+    contestEvent.emit("contestChange");
+    contestEvent.emit(contest.contestId);
+    res.status(200).json();
+});
+
 module.exports = router;
