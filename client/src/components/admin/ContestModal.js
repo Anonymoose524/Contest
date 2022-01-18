@@ -29,10 +29,29 @@ function ContestModal(props) {
 
     async function deleteProblem(event){
         event.preventDefault();
+        console.log(event);
+        let contestindex = parseInt(event.target.getAttribute("contestindex"));
+        let problemindex = parseInt(event.target.getAttribute("problemindex"));
+        await fetch(process.env.REACT_APP_SERVER + "/contests/problem/" + props.Contests[contestindex]._id + "/" + props.Contests[contestindex].problems[problemindex]._id, {
+            method: "DELETE"
+        });
     }
 
     async function postProblem(event){
         event.preventDefault();
+        let contestindex = parseInt(event.target.getAttribute("contestindex"));
+        await fetch(process.env.REACT_APP_SERVER + "/contests/problem", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                contestId: props.Contests[contestindex].contestId,
+                problem: {
+                    title: event.target.title.value,
+                    statement: event.target.statement.value
+                }
+            })
+        });
+        document.getElementById(event.target.getAttribute("id")).reset();
     }
 
     return(
@@ -95,19 +114,19 @@ function ContestModal(props) {
                                                                     </thead>
                                                                     <tbody>
                                                                         {
-                                                                            contest.problems.map((problem, contestindex) => {
+                                                                            contest.problems.map((problem, problemindex) => {
                                                                                 return (
-                                                                                    <tr key={contestindex+1}>
-                                                                                        <th scope="row">{contestindex+1}</th>
+                                                                                    <tr key={problemindex+1}>
+                                                                                        <th scope="row">{problemindex+1}</th>
                                                                                         <td>{problem.title}</td>
                                                                                         <td style={{"wordWrap": "break-word","minWidth": "160px", "maxWidth": "160px"}}>{problem.statement}</td>
-                                                                                        <td><button type="button" className="btn-close" aria-label="Close" contestindex={contestindex} contestindex={contestindex} onClick={(event) => deleteProblem(event)}/></td>
+                                                                                        <td><button type="button" className="btn-close" aria-label="Close" contestindex={contestindex} problemindex={problemindex} onClick={(event) => deleteProblem(event)}/></td>
                                                                                     </tr>
                                                                                 )
                                                                             })
                                                                         }
                                                                         <tr>
-                                                                            <td><form id={"postProblem:" + contest.contestId} onSubmit={(event) => postProblem(event)}></form></td>
+                                                                            <td><form id={"postProblem:" + contest.contestId} contestindex={contestindex} onSubmit={(event) => postProblem(event)}></form></td>
                                                                             <td><input className="form-control" type={"text"} form={"postProblem:" + contest.contestId} name="title" placeholder="Title"></input></td>
                                                                             <td><input className="form-control" type={"text"} form={"postProblem:" + contest.contestId} name="statement" placeholder="Statement"></input></td>
                                                                             <td><button type="submit" className="btn btn-success" form={"postProblem:" + contest.contestId}>Create</button></td>
