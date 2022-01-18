@@ -55,9 +55,11 @@ router.post("/", async (req, res) => {
         });
     } else {
         const newContest = new Contest({
+            contestId: req.body.contestId,
             title: req.body.title,
             start: req.body.start,
-            end: req.body.end
+            end: req.body.end,
+            description: req.body.description
         });
         await newContest.save();
         contestEvent.emit("newContest")
@@ -67,7 +69,7 @@ router.post("/", async (req, res) => {
 
 //Adds a problem to an existing contest
 router.post("/problem", async (req, res) => {
-    const contest = await Contest.findOne({title: req.body.title});
+    const contest = await Contest.findOne({contestId: req.body.contestId});
     if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
     //Binary search and replace?
     contest.problems.push({
