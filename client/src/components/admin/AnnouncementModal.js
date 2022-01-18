@@ -3,8 +3,7 @@ import React from "react";
 function AnnouncementModal(props) {
     
     async function deleteAnnouncement(event){
-        //event.preventDefault();
-        console.log(event.target.getAttribute("index"));
+        event.preventDefault();
         let index = parseInt(event.target.getAttribute("index"));
         await fetch(process.env.REACT_APP_SERVER + "/announcements/" + props.Announcements[index]._id, {
             method: "DELETE"
