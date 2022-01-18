@@ -5,9 +5,8 @@ function ContestModal(props) {
     
     async function deleteContest(event){
         event.preventDefault();
-        console.log(event.target.getAttribute("index"));
-        let index = parseInt(event.target.getAttribute("index"));
-        await fetch(process.env.REACT_APP_SERVER + "/contests/" + props.Contests[index]._id, {
+        let contestindex = parseInt(event.target.getAttribute("contestindex"));
+        await fetch(process.env.REACT_APP_SERVER + "/contests/" + props.Contests[contestindex]._id, {
             method: "DELETE"
         });
     }
@@ -64,12 +63,12 @@ function ContestModal(props) {
                                 </thead>
                                 <tbody>
                                     {
-                                        props.Contests.map((contest, index) => {
+                                        props.Contests.map((contest, contestindex) => {
                                             return (
-                                                <React.Fragment key={index+1}>
+                                                <React.Fragment key={contestindex+1}>
                                                     
                                                     <tr>
-                                                        <th scope="row" rowSpan="2">{index+1}</th>
+                                                        <th scope="row" rowSpan="2">{contestindex+1}</th>
                                                         <td>{contest.contestId}</td>
                                                         <td>{contest.title}</td>
                                                         <td>{new Moment(contest.start).format("DD/MM/YYYY hh:mm:ss")}</td>
@@ -79,11 +78,11 @@ function ContestModal(props) {
                                                             <button type="button" className="btn btn-secondary" data-bs-toggle="collapse" data-bs-target={"#" + contest.contestId}>View Problems</button>
                                                         </td>
                                                         <td>
-                                                            <button type="button" className="btn-close" aria-label="Close" index={index} onClick={(event) => deleteContest(event)}/>
+                                                            <button type="button" className="btn-close" aria-label="Close" contestindex={contestindex} onClick={(event) => deleteContest(event)}/>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th colSpan="5">
+                                                        <th colSpan="6">
                                                             <div className="collapse" id={contest.contestId}>
                                                                 <table className="table table-striped">
                                                                     <thead>
@@ -96,13 +95,13 @@ function ContestModal(props) {
                                                                     </thead>
                                                                     <tbody>
                                                                         {
-                                                                            contest.problems.map((problem, index) => {
+                                                                            contest.problems.map((problem, contestindex) => {
                                                                                 return (
-                                                                                    <tr key={index+1}>
-                                                                                        <th scope="row">{index+1}</th>
+                                                                                    <tr key={contestindex+1}>
+                                                                                        <th scope="row">{contestindex+1}</th>
                                                                                         <td>{problem.title}</td>
                                                                                         <td style={{"wordWrap": "break-word","minWidth": "160px", "maxWidth": "160px"}}>{problem.statement}</td>
-                                                                                        <td><button type="button" className="btn-close" aria-label="Close" index={index} onClick={(event) => deleteProblem(event)}/></td>
+                                                                                        <td><button type="button" className="btn-close" aria-label="Close" contestindex={contestindex} contestindex={contestindex} onClick={(event) => deleteProblem(event)}/></td>
                                                                                     </tr>
                                                                                 )
                                                                             })
