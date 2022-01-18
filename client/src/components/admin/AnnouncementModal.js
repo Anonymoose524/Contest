@@ -63,8 +63,8 @@ function AnnouncementModal(props) {
                                     }
                                     <tr>
                                         <td></td>
-                                        <td><input className="form-control" type={"text"} form="postAnnouncement" name="title"></input></td>
-                                        <td><input className="form-control" type={"text"} form="postAnnouncement" name="description"></input></td>
+                                        <td><input className="form-control" type={"text"} form="postAnnouncement" name="title" placeholder="Title"></input></td>
+                                        <td><input className="form-control" type={"text"} form="postAnnouncement" name="description" placeholder="Description"></input></td>
                                         <td><button type="submit" className="btn btn-success" form="postAnnouncement">Create</button></td>
                                     </tr>
                                 </tbody>
