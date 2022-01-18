@@ -48,7 +48,6 @@ class Admin extends React.Component {
         await fetch(process.env.REACT_APP_SERVER + "/contests/long")
             .then((res) => res.json())
             .then((data) => {
-                //TODO: Force update if shallow equality
                 this.setState({Contests: data});
                 this.getContests();
             })
