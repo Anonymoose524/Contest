@@ -57,9 +57,13 @@ router.post("/", async (req, res) => {
 
 //Deletes an announcement by its id
 router.delete("/:_id", async (req, res) => {
-    await Announcement.findByIdAndDelete(req.params._id);
-    announcementEvent.emit("announcementChange");
-    res.json();
+    const deletedAnnouncement = await Announcement.findByIdAndDelete(req.params._id);
+    if(deletedAnnouncement === null) {
+        res.status(404).json(null);
+    } else {
+        announcementEvent.emit("announcementChange");
+        res.status(200).json(deletedAnnouncement);
+    }
 });
 
 module.exports = router;
