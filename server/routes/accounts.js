@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Account = require("../models/account");
 const Token = require("../models/token");
+const events = require("events");
+const accountEvent = new events.EventEmitter();
 
 //Account login
 router.post("/login", async (req, res) => {
@@ -54,6 +56,7 @@ router.post("/signup", async (req, res) => {
                     admin: account.admin
                 });
                 newToken.save();
+                accountEvent.emit("accountChange");
                 return res.status(201).send({
                     message: "Account added successfully",
                     newToken: newToken
@@ -92,10 +95,22 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/long", async (req, res) => {
+    try{
+        accountEvent.once("accountChange", async () => {
+            const accounts = await Account.find();
+            res.json(accounts);
+        });
+    } catch(err){
+        console.log(err);
+        res.status(500).send(err);
+    }
+});
+
 //Get an account by ID
-router.get("/:postID", async (req, res) => {
+router.get("/:_id", async (req, res) => {
     try {
-        const account = await Account.findById(req.params.postID);
+        const account = await Account.findById(req.params._id);
         res.json(account);
     } catch(err) {
         res.json({message: err});
@@ -121,14 +136,16 @@ router.post("/", async (req, res) => {
 
 
 //Delete an account by ID
-router.delete("/:id", (req, res) => {
-    Account.findByIdAndDelete(req.params.id, (err, docs) => {
-         if(err || docs == null){
+router.delete("/:_id", async (req, res) => {
+    Account.findByIdAndDelete(req.params._id, (err, docs) => {
+         if(err || docs === null){
             res.status(404).send("Username does not exist");
          } else {
-            res.json(docs);
+            accountEvent.emit("accountChange");
+            res.status(200).json(docs);
+            Token.deleteMany({username: docs.username});
          }
-    })
+    });
 });
 
 module.exports = router;

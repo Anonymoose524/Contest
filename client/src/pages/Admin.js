@@ -1,4 +1,5 @@
 import React from "react";
+import AccountModal from "../components/admin/AccountModal";
 import AnnouncementModal from "../components/admin/AnnouncementModal";
 import ContestModal from "../components/admin/ContestModal";
 
@@ -24,9 +25,15 @@ class Admin extends React.Component {
             .then((res) => res.json())
             .then((data) => this.setState({Contests: data}))
             .catch((err) => console.log(err));
+            //Setup contests
+        await fetch(process.env.REACT_APP_SERVER + "/accounts/")
+            .then((res) => res.json())
+            .then((data) => this.setState({Accounts: data}))
+            .catch((err) => console.log(err));
         //Begin long polling
         this.getAnnouncements();
         this.getContests();
+        this.getAccounts();
     }
 
     //Long polling for announcements
@@ -57,14 +64,32 @@ class Admin extends React.Component {
             });
     }
 
+    //Long polling for accounts
+    async getAccounts() {
+        await fetch(process.env.REACT_APP_SERVER + "/accounts/long")
+            .then((res) => res.json())
+            .then((data) => {
+                this.setState({Accounts: data});
+                this.getAccounts();
+            })
+            .catch((err) => {
+                console.log(err);
+                this.getAccounts();
+            });
+    }
+
     render(){
         return (
             <div className="container">
                 <br></br>
                 <h1 className="page-header">Admin Portal</h1>
                 <hr></hr>
-                <AnnouncementModal Announcements={this.state.Announcements}/>
-                <ContestModal Contests={this.state.Contests}/>
+                <div className="container">
+                    <AnnouncementModal Announcements={this.state.Announcements}/>
+                    <ContestModal Contests={this.state.Contests}/>
+                    <AccountModal Accounts={this.state.Accounts}/>
+                </div>
+                
             </div>
         );
     }
