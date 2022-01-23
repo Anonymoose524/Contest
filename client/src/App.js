@@ -7,7 +7,6 @@ import RequireAdmin from './components/auth/RequireAdmin';
 import Home from "./pages/Home";
 import Contests from "./pages/Contests";
 import Contest from "./pages/Contest";
-import Problem from "./pages/Problem";
 import Admin from "./pages/Admin";
 import NotFound from './components/NotFound';
 
@@ -56,7 +55,6 @@ function App() {
             <Route exact path = "/" element = {<Home/>} />
             <Route exact path = "/contests" element = {<Contests/>}/>
             <Route path = "/contests/:contestId" element = {<Contest/>}/>
-            <Route path = "/contests/:contestId/:problemId" element = {<Problem/>} />
             <Route path = "/" element = {<RequireAdmin token={token}/>}>
               <Route exact path = "/admin" element = {<Admin/>} />
             </Route>
