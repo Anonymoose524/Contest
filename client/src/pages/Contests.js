@@ -46,13 +46,14 @@ class Contests extends React.Component {
                 <h1 className="page-header">Contests</h1>
                 <hr></hr>
                 {
-                    this.state.Contests.map((contest) => (
+                    this.state.Contests.map((contest, index) => (
                         <ContestCard
                             contestId={contest.contestId}
                             title={contest.title} 
                             start={contest.start}
                             end={contest.end}
                             description={contest.description}
+                            key={index}
                         />
                     ))
                 }

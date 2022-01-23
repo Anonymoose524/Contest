@@ -47,10 +47,11 @@ class Home extends React.Component {
                 <h1 className="page-header">Announcements</h1>
                 <hr />
                 {
-                    this.state.Announcements.map((announcement) => (
+                    this.state.Announcements.map((announcement, index) => (
                         <AnnounceCard
                             title={announcement.title} 
                             description={announcement.description}
+                            key={index}
                         />
                     ))
                 }

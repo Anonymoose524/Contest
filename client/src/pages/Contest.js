@@ -47,10 +47,11 @@ class Contest extends React.Component {
                 <h1>{this.state.Contest.title}</h1>
                 <hr></hr>
                 {
-                    this.state.Contest.problems.map((problem) => {
+                    this.state.Contest.problems.map((problem, index) => {
                         return <ProblemCard
                             title={problem.title}
                             statement={problem.statement}
+                            key={index}
                         />
                     })
                 }
