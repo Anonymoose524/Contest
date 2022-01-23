@@ -55,7 +55,7 @@ function ContestModal(props) {
     }
 
     return(
-        <div>
+        <div style={{display: "inline-block", marginRight: "10px"}}>
             <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contestModal">
             Contests
             </button>
