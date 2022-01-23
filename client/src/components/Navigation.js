@@ -27,7 +27,7 @@ function Navigation(props){
                                 <a className="nav-link" href="/contests">Contests</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/admin">FAQ</a>
+                                <a className="nav-link" href="/admin">Admin Portal</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" onClick={handleLogout}>Logout</a> {/*TODO*/}
