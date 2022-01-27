@@ -85,7 +85,6 @@ function ContestModal(props) {
                                         props.Contests.map((contest, contestindex) => {
                                             return (
                                                 <React.Fragment key={contestindex+1}>
-                                                    
                                                     <tr>
                                                         <th scope="row" rowSpan="2">{contestindex+1}</th>
                                                         <td>{contest.contestId}</td>
@@ -101,7 +100,7 @@ function ContestModal(props) {
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th colSpan="6">
+                                                        <td colSpan="6">
                                                             <div className="collapse" id={contest.contestId}>
                                                                 <table className="table table-striped">
                                                                     <thead>
@@ -135,7 +134,7 @@ function ContestModal(props) {
                                                                     
                                                                 </table>
                                                             </div>
-                                                        </th>
+                                                        </td>
                                                     </tr>
                                                 </React.Fragment>
                                             )
