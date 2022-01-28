@@ -31,30 +31,37 @@ function Login(props) {
     if(!warn) return null;
     return (
       <div>
-        <h1>Incorrect credentials</h1>
+        <p className="py-3 text-danger">Incorrect credentials</p>
       </div>
     );
   }
   
   return(
-      <div className="container">
-        <h1>Please Log In</h1>
-        <form onSubmit={handleSubmit}>
-          <label>
-            <p>Username</p>
-            <input type="text" name="username" />
-          </label>
-          <label>
-            <p>Password</p>
-            <input type="password" name="password" />
-          </label>
-          <div>
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-        <WarningBanner/>
+    <div className="container py-5" style={{"display": "flex", "justify-content": "center"}}>
+      <div className="card" style={{"minWidth": "400px", "borderRadius": "10px", "borderWidth": "medium"}}>
+        <div className="card-body text-center">
+          <h1>Sign in</h1>
+          <form className="form" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="username">Username</label>
+              <input className="form-control" placeholder="Username" type="text" id="username" name="username" />
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <input className="form-control" placeholder="Password" type="password" id="password" name="password" />
+            </div>
+            
+            <div>
+              <button className="btn btn-primary mt-3" type="submit">Submit</button>
+            </div>
+            <WarningBanner/>
+          </form>
+          
+        </div>
       </div>
-    )
+    </div>
+
+  );
 }
 
 export default Login;
