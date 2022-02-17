@@ -94,12 +94,16 @@ router.delete("/:_id", async (req, res) => {
     }
 });
 
+//Delete a problem inside a contest by its id
 router.delete("/problem/:contest_id/:problem_id", async (req, res) => {
+    //Find the contest and check if it exists
     const contest = await Contest.findOne({"_id": req.params.contest_id});
     if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    //Find the problem and check if it exists, then delete
     let index = contest.problems.findIndex((problem) => problem._id.toString() === req.params.problem_id);
     if(index == -1) return res.status(404).send("Problem doesn't exist");
     contest.problems.splice(index, 1);
+    //Save updated contest, emit respective event
     await contest.save();
     contestEvent.emit("contestChange");
     contestEvent.emit(contest.contestId);
