@@ -17,7 +17,7 @@ function Navigation(props){
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container">
-                    <a className="navbar-brand" href="/">Newport Programming Contest</a>
+                    <a className="navbar-brand" href="/">Programming Contest</a>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
