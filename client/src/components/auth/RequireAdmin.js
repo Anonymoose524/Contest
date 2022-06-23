@@ -17,7 +17,7 @@ function RequireAdmin(props){
 
     if(isAdmin === null) return null;
     else if(isAdmin) return <Outlet/>;
-    else return <NotFound/>
+    else return <NotFound/>;
 
 }
 
