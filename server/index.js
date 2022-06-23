@@ -14,7 +14,7 @@ app.use(express.json());
 //Import Routes
 app.use("/accounts", require("./routes/accounts"));
 app.use("/announcements", require("./routes/announcements"));
-app.use("/contests", require("./routes/contests").default);
+app.use("/contests", require("./routes/contests"));
 app.use("/submissions", require("./routes/submissions"));
 
 app.get("/", (req, res) => {
