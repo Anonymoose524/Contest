@@ -3,8 +3,11 @@ const router = express.Router();
 const Contest = require("../models/contest");
 const events = require("events");
 const contestEvent = new events.EventEmitter();
+const fileUpload = require("express-fileupload");
 
-//Gets all the contests
+router.use(fileUpload());
+
+//Get all contests
 router.get("/", async (req, res) => {
     try {
         const contests = await Contest.find();
@@ -27,14 +30,14 @@ router.get("/long", async (req, res) => {
     }
 });
 
-//Get only one contest using contestId
+//Get one contest using contestId
 router.get("/:contestId", async (req, res) => {
     const contest = await Contest.findOne({contestId: req.params.contestId});
     if(!contest || Object.keys(contest).length === 0) return res.status(404).send("Contest doesn't exist");
     res.status(200).json(contest);
 });
 
-//Long poll for only one contest
+//Long poll for one contest
 router.get("/long/:contestId", async (req, res) => {
     try{
         contestEvent.once(req.params.contestId, async () => {
@@ -47,7 +50,7 @@ router.get("/long/:contestId", async (req, res) => {
     }
 });
 
-//Adds a new contest to the database
+//Add a new contest to the database
 router.post("/", async (req, res) => {
     if(await (Contest.exists({title: req.body.title}))){
         res.status(400).send({
@@ -67,11 +70,10 @@ router.post("/", async (req, res) => {
     }
 });
 
-//Adds a problem to an existing contest
+//Add a problem to an existing contest
 router.post("/problem", async (req, res) => {
     const contest = await Contest.findOne({contestId: req.body.contestId});
     if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
-    //Binary search and replace?
     contest.problems.push({
         title: req.body.problem.title,
         statement: req.body.problem.statement
@@ -83,7 +85,7 @@ router.post("/problem", async (req, res) => {
     res.status(201).send("Problem added");
 });
 
-//Deletes a contest by its id
+//Delete a contest by its id
 router.delete("/:_id", async (req, res) => {
     const deletedContest = await Contest.findByIdAndDelete(req.params._id);
     if(deletedContest === null) {
