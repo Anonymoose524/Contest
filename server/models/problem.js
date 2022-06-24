@@ -6,6 +6,10 @@ const ProblemSchema = mongoose.Schema({
     },
     statement: {
         type: String,
+    },
+    testcases: {
+        type: [mongoose.SchemaTypes.Mixed],
+        default: []
     }
 });
 
