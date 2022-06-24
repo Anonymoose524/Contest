@@ -70,10 +70,11 @@ router.post("/", async (req, res) => {
     }
 });
 
-//Add a problem to an existing contest
+//Add a new problem to an existing contest
 router.post("/problem", async (req, res) => {
     const contest = await Contest.findOne({contestId: req.body.contestId});
     if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    if(contest.problems.find(doc => doc.title === req.body.problem.title) !== undefined) return res.status(400).send("Problem already exists");
     contest.problems.push({
         title: req.body.problem.title,
         statement: req.body.problem.statement
@@ -83,6 +84,19 @@ router.post("/problem", async (req, res) => {
     contestEvent.emit("contestChange");
     contestEvent.emit(contest.contestId);
     res.status(201).send("Problem added");
+});
+
+//Add a testcase for an existing problem in an existing contest
+router.post("/testcase", async (req, res) => {
+    const contest = await Contest.findOne({contestId: req.body.contestId});
+    if(!contest || Object.keys(contest).length === 0) return res.status(400).send("Contest doesn't exist");
+    const problem = contest.problems.find(doc => doc.title === req.body.problemTitle);
+    if(problem === undefined) return res.status(400).send("Problem doesn't exist");
+    problem.testcases.push(req.files.testcase);
+    await contest.save();
+    contestEvent.emit("contestChange");
+    contestEvent.emit(contest.contestId);
+    res.status(201).send("Testcase added");
 });
 
 //Delete a contest by its id
